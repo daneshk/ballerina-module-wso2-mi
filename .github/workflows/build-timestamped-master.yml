@@ -23,6 +23,7 @@ jobs:
         with:
           distribution: "temurin"
           java-version: 21.0.3
+          cache: maven
 
       - name: Change to Timestamped Version
         run: |
@@ -50,16 +51,13 @@ jobs:
           ./gradlew publish --no-daemon --scan
           ./gradlew jacocoAggregatedReport
 
-      - name: Upload Coverage to CodeCov
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: wso2-extensions/${{ github.event.repository.name }}
-          files: ./tests/build/reports/jacoco/test/jacocoTestReport.xml,./build/reports/jacoco/aggregate/jacocoTestReport.xml
+          files: ./tests/build/reports/jacoco/test/jacocoTestReport.xml
           flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
-          verbose: true
+          name: main-branch-coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

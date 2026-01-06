@@ -40,7 +40,28 @@ jacocoTestReport {
     reports {
         xml.required = true
         html.required = true
-        xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
-        html.destination file("${buildDir}/reports/jacoco/test/html")
+    }
+}
+
+// Configure JaCoCo coverage after all projects are evaluated
+gradle.projectsEvaluated {
+    def coverageProjects = [
+            project(':mi-ballerina'),
+            project(':mi-compiler-plugin')
+    ]
+
+    jacocoTestReport {
+        // Set the class directories to include classes from dependent projects
+        classDirectories.setFrom(files(coverageProjects.collect {
+            it.sourceSets.main.output.classesDirs
+        }))
+
+        // Set the source directories to include source from dependent projects
+        sourceDirectories.setFrom(files(coverageProjects.collect {
+            it.sourceSets.main.allSource.srcDirs
+        }))
+
+        // Execution data comes from the test task
+        executionData.setFrom(files("${buildDir}/jacoco/test.exec"))
     }
 }

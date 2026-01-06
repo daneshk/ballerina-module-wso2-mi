@@ -37,16 +37,14 @@ jobs:
                   ./gradlew test
                   ./gradlew jacocoAggregatedReport
 
-            - name: Upload Coverage to CodeCov
-              uses: codecov/codecov-action@v5
-              with:
-                token: ${{ secrets.CODECOV_TOKEN }}
-                slug: wso2-extensions/${{ github.event.repository.name }}
-                files: ./tests/build/reports/jacoco/test/jacocoTestReport.xml,./build/reports/jacoco/aggregate/jacocoTestReport.xml
-                flags: unittests
-                name: codecov-umbrella
-                fail_ci_if_error: false
-                verbose: true
+            -   name: Upload coverage to Codecov
+                uses: codecov/codecov-action@v5
+                with:
+                    token: ${{ secrets.CODECOV_TOKEN }}
+                    slug: wso2-extensions/ballerina-mi-module-gen-tool
+                    files: ./tests/build/reports/jacoco/test/jacocoTestReport.xml
+                    flags: unittests
+                    name: ubuntu-coverage
 
     windows-build:
         name: Build on Windows

@@ -87,29 +87,3 @@ task build {
     dependsOn ":mi-ballerina:build"
     dependsOn ":mi-tests:test"
 }
-
-jacoco {
-    toolVersion = "0.8.11"
-}
-
-task jacocoAggregatedReport(type: JacocoReport) {
-    dependsOn ":mi-tests:test"
-
-    reports {
-        xml.required = true
-        html.required = true
-        xml.destination file("${buildDir}/reports/jacoco/aggregate/jacocoTestReport.xml")
-        html.destination file("${buildDir}/reports/jacoco/aggregate/html")
-    }
-
-    gradle.projectsEvaluated {
-        // Collect execution data from the test module
-        executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-
-        // Collect class files from the test module
-        classDirectories.from = files(project(':mi-tests').sourceSets.main.output.classesDirs)
-
-        // Collect source files from the test module
-        sourceDirectories.from = files(project(':mi-tests').sourceSets.main.allSource.srcDirs)
-    }
-}
