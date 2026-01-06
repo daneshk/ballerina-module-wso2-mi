@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
 }
 
 group = project.group
@@ -25,6 +26,21 @@ test {
     useTestNG() {
         suites 'src/test/resources/testng.xml'
     }
+    finalizedBy jacocoTestReport
 }
 
 test.dependsOn(":mi-ballerina:build")
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+        xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        html.destination file("${buildDir}/reports/jacoco/test/html")
+    }
+}
